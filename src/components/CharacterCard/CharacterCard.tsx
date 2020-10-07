@@ -7,10 +7,12 @@ import {
   CharacterCardEl,
   CharacterCardLabel,
   CharacterContentWrapper,
-  CharacterHeader
+  CharacterHeader,
+  EpisodesWrapper,
 } from "./CharacterCard.styled";
 import StatusIndicator from "../StatusIndicator/StatusIndicator";
 import { useGetLocation } from "../../api/api";
+import { Episode } from "../Episode/Episode";
 
 interface ICharacterCardProps {
   character: Character;
@@ -18,6 +20,7 @@ interface ICharacterCardProps {
 
 export function CharacterCard(props: ICharacterCardProps) {
   const { character } = props;
+  const [showMoreEpisode, setShowMoreEpisode] = useState(false);
 
   const locationUrl = character.location.url.split("/location/");
   const locationId = locationUrl.length ? locationUrl[1] : null;
@@ -27,7 +30,9 @@ export function CharacterCard(props: ICharacterCardProps) {
 
   const { location } = useGetLocation(originId);
 
-
+  const episodes = showMoreEpisode
+    ? character.episode
+    : character.episode.slice(0, 4);
 
   return (
     <CharacterCardEl key={character.id} className="character-card">
@@ -68,7 +73,26 @@ export function CharacterCard(props: ICharacterCardProps) {
             </span>
           </>
         ) : null}
-
+        {episodes.length >= 0 && (
+          <EpisodesWrapper>
+            <CharacterCardLabel>Episodi dove compare</CharacterCardLabel>
+            <ul>
+              {episodes.map((ep) => (
+                <Episode key={ep} url={ep} />
+              ))}
+            </ul>
+            {character.episode.length > 4 && !showMoreEpisode && (
+              <span
+                className="load-more"
+                onClick={() => {
+                  setShowMoreEpisode(true);
+                }}
+              >
+                Mostra altri...
+              </span>
+            )}
+          </EpisodesWrapper>
+        )}
       </CharacterContentWrapper>
     </CharacterCardEl>
   );
