@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import CharacterListPage from "./CharacterListPage/CharacterListPage";
 
 
 export default function BasicExample() {
@@ -7,7 +8,7 @@ export default function BasicExample() {
     <Router>
       <Switch>
         <Route exact path="/">
-          <span>placeholder</span>
+          <CharacterListPage />
         </Route>
         <Route path="/location/:locationId" children={<span />} />
       </Switch>
